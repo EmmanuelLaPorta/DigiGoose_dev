@@ -1,0 +1,60 @@
+@startuml
+actor Giocatore
+participant "InterfacciaUtente" as UI
+participant "PartitaController" as PC
+participant "Partita" as P
+participant "Dadi" as Dadi
+participant "Pedina" as Pedina
+participant "Tabellone" as Tabellone
+participant "Casella" as Casella
+
+Giocatore -> UI: seleziona "Lancia i dadi"
+UI -> PC: tiraDadi()
+PC -> Dadi: lancia()
+Dadi --> PC: valori[]
+PC -> Dadi: getSomma()
+Dadi --> PC: sommaDadi
+PC --> UI: mostraRisultatoDadi(valori)
+UI --> Giocatore: visualizza risultato dadi
+
+PC -> P: getGiocatoreCorrente()
+P --> PC: giocatoreCorrente
+PC -> giocatoreCorrente: getPedina()
+giocatoreCorrente --> PC: pedinaCorrente
+PC -> P: getTabellone()
+P --> PC: tabellonePartita
+
+PC -> pedinaCorrente: getPosizione()
+pedinaCorrente --> PC: posizioneCorrente
+PC -> PC: potenzialePosizione = posizioneCorrente + sommaDadi
+
+alt potenzialePosizione > tabellonePartita.getPosizioneMassima()
+    PC -> tabellonePartita: getPosizioneMassima()
+    tabellonePartita --> PC: posizioneMassima
+    PC -> PC: posizioneFinale = posizioneMassima - (potenzialePosizione - posizioneMassima)
+else
+    PC -> PC: posizioneFinale = potenzialePosizione
+end
+
+PC -> pedinaCorrente: setPosizione(posizioneFinale)
+pedinaCorrente --> PC: posizioneAggiornata
+
+PC --> UI: visualizzaTabellone(partitaCorrente)
+UI --> Giocatore: visualizza pedina spostata su tabellone
+
+PC -> tabellonePartita: getCasella(posizioneFinale)
+tabellonePartita --> PC: casellaDestinazione
+
+alt casellaDestinazione.getNumero() == 63
+    PC -> PC: verificaVincitore(giocatoreCorrente)
+    PC --> UI: mostraVincitore(giocatoreCorrente)
+else casellaDestinazione.isSpeciale()
+    PC -> PC: applicaEffettoCasella(casellaDestinazione, giocatoreCorrente)
+    PC --> UI: mostraEffettoCasella(casellaDestinazione.getTipoEffetto())
+    PC -> PC: gestisciTurni()
+else
+    PC -> PC: gestisciTurni()
+end
+
+@enduml
+

@@ -1,0 +1,98 @@
+package it.digigoose.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import it.digigoose.model.*;
+
+
+public class PartitaController {
+    private Partita partita;
+    private GestoreSalvataggio gestoreSalvataggio;
+    
+    public PartitaController() {
+    	 this.gestoreSalvataggio = new GestoreSalvataggio();
+    }
+    
+    public PartitaController(Partita partita) {
+    	this();
+        this.partita = partita;
+    }
+    
+    public void iniziaPartita(List<Giocatore> giocatori) {
+        partita = new Partita(giocatori);
+        partita.determinaOrdineGiocatori();
+        partita.inizializzaPosizioni();
+        partita.setStato(StatoPartita.IN_CORSO);
+    }
+    
+    public Giocatore getGiocatoreCorrente() {
+        return partita.getGiocatoreCorrente();
+    }
+    
+    public void passaTurno() {
+        partita.passaAlProssimoGiocatore();
+    }
+    
+    public int[] tiraDadi() {
+        // Per il gioco dell'oca classico, si usano due dadi a sei facce
+        Dadi dadi = new Dadi(6, 2);
+        return dadi.lancia();
+    }
+    
+    public Casella muoviPedina(Giocatore giocatore, int passi) {
+        int posizionePrecedente = giocatore.getPosizione();
+        int nuovaPosizione = posizionePrecedente + passi;
+        
+        // Gestione limiti del tabellone
+        if (nuovaPosizione > partita.getTabellone().getPosizioneMassima()) {
+            int eccesso = nuovaPosizione - partita.getTabellone().getPosizioneMassima();
+            nuovaPosizione = partita.getTabellone().getPosizioneMassima() - eccesso;
+        }
+        
+        giocatore.setPosizione(nuovaPosizione);
+        return partita.getTabellone().getCasella(nuovaPosizione);
+    }
+    
+    public void applicaEffettoCasella(Casella casella, Giocatore giocatore) {
+        if (casella != null && casella.isSpeciale()) {
+            casella.applicaEffetto(giocatore);
+        }
+    }
+    
+    public boolean verificaVincitore(Giocatore giocatore) {
+        // Nel gioco dell'oca, si vince arrivando esattamente alla casella 63
+        return giocatore.getPosizione() == partita.getTabellone().getPosizioneMassima();
+    }
+    
+    
+    public Partita getPartita() {
+        return partita;
+    }
+    
+    public void setPartita(Partita partita) {
+        this.partita = partita;
+    }
+    
+    public void salvaPartita() {
+        try {
+            gestoreSalvataggio.salvaPartita(partita);
+        } catch (IOException e) {
+            System.err.println("Errore durante il salvataggio della partita: " + e.getMessage());
+        }
+    }
+    
+    public Partita caricaPartita(String id) {
+        try {
+            partita = gestoreSalvataggio.caricaPartita(id);
+            return partita;
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public String[] getListaSalvataggi() {
+        return gestoreSalvataggio.getListaSalvataggi();
+    }
+}
