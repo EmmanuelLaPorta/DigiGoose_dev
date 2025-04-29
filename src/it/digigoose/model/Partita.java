@@ -16,6 +16,7 @@ public class Partita implements Serializable {
     private int turnoCorrente;
     private StatoPartita stato;
     private int giroCorrente = 1;
+    private int indicePrimoGiocatoreGiroAttuale = 0; // Indice del primo giocatore nel giro corrente
 
     private static final long serialVersionUID = 1L;
     
@@ -64,6 +65,8 @@ public class Partita implements Serializable {
 
     public void incrementaGiro() {
         giroCorrente++;
+        // Resetta il turno quando inizia un nuovo giro
+        turnoCorrente = 1;
     }
 
     public Giocatore getGiocatoreCorrente() {
@@ -123,16 +126,27 @@ public class Partita implements Serializable {
         int indiceCorrente = ordineGiocatori.indexOf(giocatoreCorrente);
         int indiceProssimo = (indiceCorrente + 1) % ordineGiocatori.size();
         
+        // Se stiamo tornando al primo giocatore, incrementa il giro
+        if (indiceProssimo == 0) {
+            incrementaGiro();
+        } else {
+            // Altrimenti, incrementa il turno all'interno del giro corrente
+            incrementaTurno();
+        }
+        
         giocatoreCorrente = ordineGiocatori.get(indiceProssimo);
         
         // Se il prossimo giocatore deve saltare il turno, lo aggiorniamo e passiamo al prossimo
         while (giocatoreCorrente.devePassareTurno()) {
             giocatoreCorrente.decrementaTurniSaltati();
             indiceProssimo = (indiceProssimo + 1) % ordineGiocatori.size();
-            giocatoreCorrente = ordineGiocatori.get(indiceProssimo);
-            if (giocatoreCorrente == ordineGiocatori.get(ordineGiocatori.size() - 1)) {
+            
+            // Se stiamo tornando al primo giocatore dopo aver gestito un salto di turno
+            if (indiceProssimo == 0) {
                 incrementaGiro();
             }
+            
+            giocatoreCorrente = ordineGiocatori.get(indiceProssimo);
         }
     }
 }

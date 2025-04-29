@@ -162,6 +162,9 @@ public class InterfacciaUtente {
         }
     }
     
+   // Questo frammento di codice mostra le modifiche da apportare al metodo mostraTabelloneEGiocatori
+// nella classe InterfacciaUtente.java
+
     public void mostraTabelloneEGiocatori(Partita partita) {
         while (partita.getStato() == StatoPartita.IN_CORSO) {
             System.out.println("\n===== Tabellone di Gioco =====");
@@ -177,9 +180,7 @@ public class InterfacciaUtente {
             }
             
             // Mostra il turno corrente
-            
-            System.out.println("Giro " + partita.getGiroCorrente());
-           // System.out.println("\n===== Turno " + partita.getTurnoCorrente() + " =====");
+            System.out.println("\n===== Giro " + partita.getGiroCorrente() + ", Turno " + partita.getTurnoCorrente() + " =====");
             Giocatore giocatoreCorrente = partita.getGiocatoreCorrente();
             System.out.println("È il turno di: " + giocatoreCorrente.getNome());
             

@@ -8,12 +8,8 @@ import it.digigoose.model.*;
 
 public class PartitaController {
     private Partita partita;
-
-    private int giroCorrente = 1;
-    //private GestoreSalvataggio gestoreSalvataggio;
     
     public PartitaController() {
-    	 //this.gestoreSalvataggio = new GestoreSalvataggio();
     }
     
     public PartitaController(Partita partita) {
@@ -33,16 +29,13 @@ public class PartitaController {
     }
     
     public void passaTurno() {
-        partita.incrementaTurno();
+        // Non è più necessario gestire il giroCorrente qui
+        // poiché sarà gestito nella classe Partita
         partita.passaAlProssimoGiocatore();
     }
     
     public int getGiroCorrente() {
-        return giroCorrente;
-    }
-
-    public void incrementaGiro() {
-        giroCorrente++;
+        return partita.getGiroCorrente();
     }
     
     public int[] tiraDadi() {
@@ -89,25 +82,4 @@ public class PartitaController {
         this.partita = partita;
     }
     
-    // public void salvaPartita() {
-    //     try {
-    //         gestoreSalvataggio.salvaPartita(partita);
-    //     } catch (IOException e) {
-    //         System.err.println("Errore durante il salvataggio della partita: " + e.getMessage());
-    //     }
-    // }
-    
-    // public Partita caricaPartita(String id) {
-    //     try {
-    //         partita = gestoreSalvataggio.caricaPartita(id);
-    //         return partita;
-    //     } catch (IOException | ClassNotFoundException e) {
-    //         System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
-    //         return null;
-    //     }
-    // }
-    
-    // public String[] getListaSalvataggi() {
-    //     return gestoreSalvataggio.getListaSalvataggi();
-    // }
 }
