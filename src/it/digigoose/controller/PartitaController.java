@@ -82,4 +82,33 @@ public class PartitaController {
         this.partita = partita;
     }
     
+    public void verificaELiberaGiocatoriBloccati(int[] valoreDadi) {
+        // Controlla se qualcuno ha lanciato un 6 (per ATTENDI_DADO)
+        boolean dado6Lanciato = false;
+        for (int valore : valoreDadi) {
+            if (valore == 6) {
+                dado6Lanciato = true;
+                break;
+            }
+        }
+        
+        // Se è stato lanciato un 6, libera tutti i giocatori in attesa di un dado 6
+        if (dado6Lanciato) {
+            for (Giocatore g : partita.getGiocatori()) {
+                // -1 indica ATTENDI_DADO
+                if (g.getTurniSaltati() == -1) {
+                    g.setTurniSaltati(0); // Resetta, il giocatore è ora libero
+                    System.out.println(g.getNome() + " è stato liberato e può giocare al prossimo turno!");
+                }
+            }
+        }
+        
+        // Verifica se il giocatore corrente è in prigione (-2) e ha fatto 6
+        Giocatore giocatoreCorrente = partita.getGiocatoreCorrente();
+        if (giocatoreCorrente.getTurniSaltati() == -2 && dado6Lanciato) {
+            giocatoreCorrente.setTurniSaltati(0); // Libera dalla prigione
+            System.out.println(giocatoreCorrente.getNome() + " ha fatto 6 ed è uscito di prigione!");
+        }
+    }
+
 }

@@ -138,7 +138,15 @@ public class Partita implements Serializable {
         
         // Se il prossimo giocatore deve saltare il turno, lo aggiorniamo e passiamo al prossimo
         while (giocatoreCorrente.devePassareTurno()) {
-            giocatoreCorrente.decrementaTurniSaltati();
+            // Gestione speciale per ATTENDI_DADO e PRIGIONE
+            if (giocatoreCorrente.getTurniSaltati() < 0) {
+                // Non facciamo nulla, questo giocatore dovrà rimanere fermo
+                // finché la condizione non verrà sbloccata tramite un altro metodo
+            } else {
+                // Comportamento normale: decrementa i turni saltati
+                giocatoreCorrente.decrementaTurniSaltati();
+            }
+            
             indiceProssimo = (indiceProssimo + 1) % ordineGiocatori.size();
             
             // Se stiamo tornando al primo giocatore dopo aver gestito un salto di turno

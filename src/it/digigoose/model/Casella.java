@@ -74,7 +74,7 @@ public class Casella implements Serializable {
                 
             case ATTENDI_DADO:
                 // Deve attendere che un altro giocatore lanci un 6 per muoversi
-                giocatore.setTurniSaltati(Integer.MAX_VALUE); // Gestito diversamente nel controller
+                giocatore.setTurniSaltati(-1); // Valore speciale -1 indica attesa del dado
                 break;
                 
             case RILANCIA_TORNA_INDIETRO:
@@ -99,7 +99,7 @@ public class Casella implements Serializable {
                 
             case PRIGIONE:
                 // Resta fermo finché non fai 6
-                giocatore.setTurniSaltati(Integer.MAX_VALUE); // Gestito diversamente nel controller
+                giocatore.setTurniSaltati(-2); // Gestito diversamente nel controller
                 break;
                 
             default:
