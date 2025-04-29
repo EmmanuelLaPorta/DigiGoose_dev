@@ -1,6 +1,6 @@
 package it.digigoose.controller;
 
-import java.io.IOException;
+// import java.io.IOException;
 import java.util.List;
 
 import it.digigoose.model.*;
@@ -8,10 +8,12 @@ import it.digigoose.model.*;
 
 public class PartitaController {
     private Partita partita;
-    private GestoreSalvataggio gestoreSalvataggio;
+
+    private int giroCorrente = 1;
+    //private GestoreSalvataggio gestoreSalvataggio;
     
     public PartitaController() {
-    	 this.gestoreSalvataggio = new GestoreSalvataggio();
+    	 //this.gestoreSalvataggio = new GestoreSalvataggio();
     }
     
     public PartitaController(Partita partita) {
@@ -31,7 +33,16 @@ public class PartitaController {
     }
     
     public void passaTurno() {
+        partita.incrementaTurno();
         partita.passaAlProssimoGiocatore();
+    }
+    
+    public int getGiroCorrente() {
+        return giroCorrente;
+    }
+
+    public void incrementaGiro() {
+        giroCorrente++;
     }
     
     public int[] tiraDadi() {
@@ -55,14 +66,18 @@ public class PartitaController {
     }
     
     public void applicaEffettoCasella(Casella casella, Giocatore giocatore) {
-        if (casella != null && casella.isSpeciale()) {
+        if (casella.getNumero() == 63) {           
+            partita.setStato(StatoPartita.TERMINATA);
+        } else if (casella != null && casella.isSpeciale()) {
             casella.applicaEffetto(giocatore);
         }
     }
     
     public boolean verificaVincitore(Giocatore giocatore) {
-        // Nel gioco dell'oca, si vince arrivando esattamente alla casella 63
-        return giocatore.getPosizione() == partita.getTabellone().getPosizioneMassima();
+        if (giocatore.getPosizione() == 63) {
+            return true;
+        }
+        return false;
     }
     
     
@@ -74,25 +89,25 @@ public class PartitaController {
         this.partita = partita;
     }
     
-    public void salvaPartita() {
-        try {
-            gestoreSalvataggio.salvaPartita(partita);
-        } catch (IOException e) {
-            System.err.println("Errore durante il salvataggio della partita: " + e.getMessage());
-        }
-    }
+    // public void salvaPartita() {
+    //     try {
+    //         gestoreSalvataggio.salvaPartita(partita);
+    //     } catch (IOException e) {
+    //         System.err.println("Errore durante il salvataggio della partita: " + e.getMessage());
+    //     }
+    // }
     
-    public Partita caricaPartita(String id) {
-        try {
-            partita = gestoreSalvataggio.caricaPartita(id);
-            return partita;
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
-            return null;
-        }
-    }
+    // public Partita caricaPartita(String id) {
+    //     try {
+    //         partita = gestoreSalvataggio.caricaPartita(id);
+    //         return partita;
+    //     } catch (IOException | ClassNotFoundException e) {
+    //         System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
+    //         return null;
+    //     }
+    // }
     
-    public String[] getListaSalvataggi() {
-        return gestoreSalvataggio.getListaSalvataggi();
-    }
+    // public String[] getListaSalvataggi() {
+    //     return gestoreSalvataggio.getListaSalvataggi();
+    // }
 }

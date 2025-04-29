@@ -177,7 +177,9 @@ public class InterfacciaUtente {
             }
             
             // Mostra il turno corrente
-            System.out.println("\n===== Turno " + partita.getTurnoCorrente() + " =====");
+            
+            System.out.println("Giro " + partita.getGiroCorrente());
+           // System.out.println("\n===== Turno " + partita.getTurnoCorrente() + " =====");
             Giocatore giocatoreCorrente = partita.getGiocatoreCorrente();
             System.out.println("È il turno di: " + giocatoreCorrente.getNome());
             
@@ -210,8 +212,7 @@ public class InterfacciaUtente {
         
         System.out.println("\nOpzioni:");
         System.out.println("1. Lancia i dadi");
-        System.out.println("2. Salva partita");
-        System.out.println("3. Esci al menu principale");
+        System.out.println("2. Esci al menu principale");
         System.out.print("Scegli un'opzione: ");
         
         int scelta = scanner.nextInt();
@@ -236,12 +237,12 @@ public class InterfacciaUtente {
                 }
                 break;
                 
-            case 2:
-                partitaController.salvaPartita();
-                System.out.println("Partita salvata con successo!");
-                break;
+            // case 2:
+            //     partitaController.salvaPartita();
+            //     System.out.println("Partita salvata con successo!");
+            //     break;
                 
-            case 3:
+            case 2:
                 System.out.println("Sei sicuro di voler uscire? La partita in corso andrà persa (S/N)");
                 String risposta = scanner.nextLine().toUpperCase();
                 if (risposta.equals("S")) {

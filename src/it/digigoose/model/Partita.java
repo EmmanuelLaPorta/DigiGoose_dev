@@ -15,7 +15,8 @@ public class Partita implements Serializable {
     private Tabellone tabellone;
     private int turnoCorrente;
     private StatoPartita stato;
-    
+    private int giroCorrente = 1;
+
     private static final long serialVersionUID = 1L;
     
     public Partita() {
@@ -57,6 +58,14 @@ public class Partita implements Serializable {
         this.ordineGiocatori = ordine;
     }
     
+    public int getGiroCorrente() {
+        return giroCorrente;
+    }
+
+    public void incrementaGiro() {
+        giroCorrente++;
+    }
+
     public Giocatore getGiocatoreCorrente() {
         return giocatoreCorrente;
     }
@@ -121,6 +130,9 @@ public class Partita implements Serializable {
             giocatoreCorrente.decrementaTurniSaltati();
             indiceProssimo = (indiceProssimo + 1) % ordineGiocatori.size();
             giocatoreCorrente = ordineGiocatori.get(indiceProssimo);
+            if (giocatoreCorrente == ordineGiocatori.get(ordineGiocatori.size() - 1)) {
+                incrementaGiro();
+            }
         }
     }
 }

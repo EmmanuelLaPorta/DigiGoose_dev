@@ -33,7 +33,7 @@ public class Tabellone implements Serializable {
         
         // Configura le caselle speciali
         // Le caselle dell'oca: tipicamente sono multiple di 9 nel gioco tradizionale
-        for (int i = 9; i <= 63; i += 9) {
+        for (int i = 9; i < 63; i += 9) {
             Casella casella = getCasella(i);
             casella.setSpeciale(true);
             casella.setTipoEffetto(TipoEffettoCasella.BALZO_E_RILANCIA);
