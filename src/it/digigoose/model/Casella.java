@@ -49,7 +49,12 @@ public class Casella implements Serializable {
                 // Avanza di 6 caselle
                 giocatore.setPosizione(giocatore.getPosizione() + 6);
                 break;
-                
+
+            case POZZO:
+            giocatore.saltaTurni(3);
+            System.out.println("Sei caduto nel pozzo! Salterai 3 turni.");
+            break;
+            
             case RITORNO_INIZIO:
                 // Torna alla casella di partenza
                 giocatore.setPosizione(0);
