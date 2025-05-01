@@ -224,17 +224,21 @@ public class InterfacciaUtente {
                 int[] risultatoDadi = partitaController.tiraDadi();
                 mostraRisultatoDadi(risultatoDadi);
                 partitaController.verificaELiberaGiocatoriBloccati(risultatoDadi);
-
+    
                 // Se il giocatore è ancora bloccato dopo la verifica, passa il turno
                 if (giocatore.getTurniSaltati() < 0) {
                     if (giocatore.getTurniSaltati() == -2) {
                         System.out.println(giocatore.getNome() + " è in prigione! Deve fare 6 per uscire.");
                     } else if (giocatore.getTurniSaltati() == -1) {
                         System.out.println(giocatore.getNome() + " deve attendere che qualcuno lanci un 6!");
+                    } else if (giocatore.getTurniSaltati() == -3) {
+                        System.out.println(giocatore.getNome() + " deve ottenere 3 o 6 con almeno un dado per proseguire!");
+                    } else if (giocatore.getTurniSaltati() == -4) {
+                        System.out.println(giocatore.getNome() + " deve ottenere 4 o 5 con almeno un dado per proseguire!");
                     }
                     return; // Esci dalla funzione, il turno è terminato
                 }
-
+    
                 Dadi dadi = new Dadi(6, 2);
                 dadi.setValori(risultatoDadi);
                 int passi = dadi.getSomma();
@@ -243,13 +247,13 @@ public class InterfacciaUtente {
                 System.out.println(giocatore.getNome() + " si sposta alla casella " + giocatore.getPosizione());
                 
                 if (casellaDestinazione != null && casellaDestinazione.isSpeciale()) {
-                    partitaController.applicaEffettoCasella(casellaDestinazione, giocatore);
+                    // Utilizziamo il nuovo metodo che gestisce anche gli effetti speciali
+                    partitaController.applicaEffettoCasellaEsteso(casellaDestinazione, giocatore, risultatoDadi);
                     mostraEffettoCasella(casellaDestinazione.getTipoEffetto());
                     System.out.println("Nuova posizione: " + giocatore.getPosizione());
                 }
                 break;
                           
-                
             case 2:
                 System.out.println("Sei sicuro di voler uscire? La partita in corso andrà persa (S/N)");
                 String risposta = scanner.nextLine().toUpperCase();

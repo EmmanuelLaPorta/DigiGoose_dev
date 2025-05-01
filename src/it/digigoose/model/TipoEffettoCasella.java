@@ -15,5 +15,7 @@ public enum TipoEffettoCasella {
     VAI_INDIETRO,
     LABIRINTO,
     PRIGIONE,
-    POZZO // Aggiunto casella speciale dimenticata
+    POZZO,
+    ATTENDI_DADO_SPECIFICO, // Richiede valori specifici dei dadi (3, 6) o (4, 5)
+    VOLA_E_FERMA           // Effetto combinato: vola a una casella e fermati un turno
 }

@@ -7,7 +7,6 @@ public class Giocatore implements Serializable {
     private String nome;
     private TipoGiocatore tipo;
     private Pedina pedina;
-    private int turniDaSaltare = 0;
     private int turniSaltati;
     private boolean richiedeRelancio;
     
@@ -62,6 +61,14 @@ public class Giocatore implements Serializable {
         this.turniSaltati = turni;
     }
     
+    /**
+     * Aumenta il numero di turni da saltare
+     * @param numeroTurni il numero di turni aggiuntivi da saltare
+     */
+    public void saltaTurni(int numeroTurni) {
+        this.turniSaltati += numeroTurni;
+    }
+    
     public boolean getRichiedeRelancio() {
         return richiedeRelancio;
     }
@@ -77,20 +84,6 @@ public class Giocatore implements Serializable {
     public void decrementaTurniSaltati() {
         if (turniSaltati > 0) {
             turniSaltati--;
-        }
-    }
-
-    public void saltaTurni(int numeroTurni) {
-        this.turniDaSaltare += numeroTurni;
-    }
-
-    public boolean deveSaltareTurno() {
-        return turniDaSaltare > 0;
-    }
-
-    public void decrementaTurniDaSaltare() {
-        if (turniDaSaltare > 0) {
-            turniDaSaltare--;
         }
     }
 }
